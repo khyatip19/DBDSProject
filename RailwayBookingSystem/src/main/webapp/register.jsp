@@ -45,8 +45,7 @@
 
             // Close the database connection
             db.closeConnection(con);
-        } catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-            // This exception is thrown if there's a unique constraint violation (e.g., duplicate username or email)
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
             message = "Username or email already exists. Please try a different one.";
         } catch (Exception e) {
             e.printStackTrace();

@@ -13,22 +13,16 @@ public class ApplicationDB {
 	public Connection getConnection(){
 		
 		//Create a connection string
-		String connectionUrl = "jdbc:mysql://localhost:3306/RailwayBookingSystem";
+		String connectionUrl = "jdbc:mysql://localhost:3306/RailwayBookingSystem?serverTimezone=UTC";
 		Connection connection = null;
 		
 		try {
-			//Load JDBC driver - the interface standardizing the connection procedure. Look at WEB-INF\lib for a mysql connector jar file, otherwise it fails.
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			//Load JDBC driver - new jdbc driver
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+		 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+	            // Print stack trace for any driver loading issues
+	            e.printStackTrace();
+	    }
 		try {
 			//Create a connection to your DB
 			connection = DriverManager.getConnection(connectionUrl,"root", "mysqlroot");
