@@ -16,6 +16,7 @@
     <div class="form-container">
         <h2>Welcome, <%= username %>!</h2>
         <p class="subtitle">You are successfully logged in.</p>
+        <p><a href="search.jsp" class="link-button">Search Train Schedules</a></p>
         <p><a href="logout.jsp" class="link-button">Logout</a></p>
     </div>
 </body>
