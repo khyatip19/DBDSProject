@@ -26,11 +26,16 @@
             // Prepare and execute the login query
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-
-            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+			
+            String query = "SELECT p.username, p.password FROM Person p JOIN Customer c ON p.username = c.username WHERE p.username = ? AND p.password = ?";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, username);
             pst.setString(2, password);
+            
+/*             String query = "SELECT * FROM Person WHERE username = ? AND password = ?";
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, username);
+            pst.setString(2, password); */
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
