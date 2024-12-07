@@ -7,31 +7,66 @@
     String origin = request.getParameter("origin");
     String destination = request.getParameter("destination");
     String travelDate = request.getParameter("travelDate");
-    String sortOrder = request.getParameter("sortOrder"); // New parameter for sorting order
+    String sortOrder = request.getParameter("sortOrder"); // Sorting option
 
     if (sortOrder == null) {
-        sortOrder = "ASC"; // Default sorting order
+        sortOrder = "departure_ASC"; // Default sorting order
     }
 
-    String message = ""; // Message to show if no schedules are found
+    String[] sortOptions = sortOrder.split("_"); // Split into column and direction
+    String sortColumn = sortOptions[0];
+    String sortDirection = sortOptions[1];
+
+    String message = ""; // Message to display if no results are found
 
     try {
         // Establish database connection
         ApplicationDB db = new ApplicationDB();
         Connection con = db.getConnection();
 
-        // Query to find matching train schedules with dynamic sorting
-       String query = "SELECT ts.schedule_id, ts.depart_datetime, ts.arrival_datetime, " +
-              "ts.travel_time, " +
-              "tl.base_fare, " +
-              "st1.name AS origin_station, st2.name AS destination_station " +
-              "FROM Train_Schedule ts " +
-              "JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
-              "JOIN Station st1 ON tl.origin = st1.station_id " +
-              "JOIN Station st2 ON tl.destination = st2.station_id " +
-              "WHERE st1.name = ? AND st2.name = ? AND DATE(ts.depart_datetime) = ? " +
-              "ORDER BY ts.depart_datetime " + sortOrder;
+        // Map sortColumn to actual SQL column names
+        String sortColumnSQL;
+        switch (sortColumn) {
+            case "arrival":
+                sortColumnSQL = "ts.arrival_datetime";
+                break;
+            case "duration":
+                sortColumnSQL = "ts.travel_time";
+                break;
+            case "fare":
+                sortColumnSQL = "ts.fare";
+                break;
+            default: // Default to departure
+                sortColumnSQL = "ts.depart_datetime";
+        }
 
+        // Query to find matching train schedules with fare and duration
+/*  		String query = "SELECT ts.schedule_id, ts.depart_datetime, ts.arrival_datetime, " +
+                       "ts.travel_time, ts.fare, " +
+                       "st1.name AS origin_station, st2.name AS destination_station " +
+                       "FROM Train_Schedule ts " +
+                       "JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
+                       "JOIN Station st1 ON tl.origin = st1.station_id " +
+                       "JOIN Station st2 ON tl.destination = st2.station_id " +
+                       "WHERE st1.name = ? AND st2.name = ? AND DATE(ts.depart_datetime) = ? " +
+                       "ORDER BY " + sortColumnSQL + " " + sortDirection; */
+ 
+ 
+                       String query = "SELECT ts.schedule_id, ts.depart_datetime, ts.arrival_datetime, " +
+                               "ts.travel_time, ts.fare, " +
+                               "st1.name AS origin_station, " +
+                               "COALESCE(intermediate_station.name, st2.name) AS destination_station " +  
+                               "FROM Train_Schedule ts " +
+                               "JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
+                               "JOIN Station st1 ON tl.origin = st1.station_id " +
+                               "JOIN Station st2 ON tl.destination = st2.station_id " +
+                               "JOIN Stop s ON ts.schedule_id = s.schedule_id " + 
+                               "JOIN Station intermediate_station ON s.station_id = intermediate_station.station_id " +
+                               "WHERE st1.name = ? " + 
+                               "AND intermediate_station.name = ? " + 
+                               "AND DATE(ts.depart_datetime) = ? " +
+                               "ORDER BY " + sortColumnSQL + " " + sortDirection;
+	
         PreparedStatement pst = con.prepareStatement(query);
         pst.setString(1, origin);
         pst.setString(2, destination);
@@ -53,15 +88,21 @@
             out.println("<input type='hidden' name='origin' value='" + origin + "'/>");
             out.println("<input type='hidden' name='destination' value='" + destination + "'/>");
             out.println("<input type='hidden' name='travelDate' value='" + travelDate + "'/>");
-            out.println("<label for='sortOrder'>Sort by Departure Time:</label>");
+            out.println("<label for='sortOrder'>Sort by:</label>");
             out.println("<select name='sortOrder' id='sortOrder' onchange='this.form.submit()'>");
-            out.println("<option value='ASC'" + ("ASC".equals(sortOrder) ? " selected" : "") + ">Ascending</option>");
-            out.println("<option value='DESC'" + ("DESC".equals(sortOrder) ? " selected" : "") + ">Descending</option>");
+            out.println("<option value='departure_ASC'" + ("departure_ASC".equals(sortOrder) ? " selected" : "") + ">Departure Time (Ascending)</option>");
+            out.println("<option value='departure_DESC'" + ("departure_DESC".equals(sortOrder) ? " selected" : "") + ">Departure Time (Descending)</option>");
+            out.println("<option value='arrival_ASC'" + ("arrival_ASC".equals(sortOrder) ? " selected" : "") + ">Arrival Time (Ascending)</option>");
+            out.println("<option value='arrival_DESC'" + ("arrival_DESC".equals(sortOrder) ? " selected" : "") + ">Arrival Time (Descending)</option>");
+            out.println("<option value='duration_ASC'" + ("duration_ASC".equals(sortOrder) ? " selected" : "") + ">Duration (Shortest First)</option>");
+            out.println("<option value='duration_DESC'" + ("duration_DESC".equals(sortOrder) ? " selected" : "") + ">Duration (Longest First)</option>");
+            out.println("<option value='fare_ASC'" + ("fare_ASC".equals(sortOrder) ? " selected" : "") + ">Fare (Lowest First)</option>");
+            out.println("<option value='fare_DESC'" + ("fare_DESC".equals(sortOrder) ? " selected" : "") + ">Fare (Highest First)</option>");
             out.println("</select>");
             out.println("</form>");
 
-            // Display schedules table
-            out.println("<table border='1'><tr><th>Train ID</th><th>Departure</th><th>Arrival</th><th>Travel Time</th><th>Origin</th><th>Destination</th><th>Duration</th><th>Fare</th><th>Details</th></tr>");
+            // Display schedules table with fare and duration
+            out.println("<table border='1'><tr><th>Train ID</th><th>Departure</th><th>Arrival</th><th>Duration</th><th>Fare</th><th>Origin</th><th>Destination</th><th>Details</th></tr>");
 
             do {
                 out.println("<tr>");
@@ -69,11 +110,9 @@
                 out.println("<td>" + rs.getTimestamp("depart_datetime") + "</td>");
                 out.println("<td>" + rs.getTimestamp("arrival_datetime") + "</td>");
                 out.println("<td>" + rs.getInt("travel_time") + " mins</td>");
+                out.println("<td>$" + rs.getBigDecimal("fare") + "</td>");
                 out.println("<td>" + rs.getString("origin_station") + "</td>");
                 out.println("<td>" + rs.getString("destination_station") + "</td>");
-                out.println("<td>" + rs.getInt("travel_time") + " mins</td>");
-                out.println("<td>$" + rs.getBigDecimal("base_fare") + "</td>");
-             // Add View Details link
                 out.println("<td><a href='trainDetails.jsp?schedule_id=" + rs.getInt("schedule_id") + "'>View Details</a></td>");
                 out.println("</tr>");
             } while (rs.next());
