@@ -48,7 +48,6 @@ CREATE TABLE `Transit_Line` (
   `line_name` VARCHAR(100) NOT NULL,
   `origin` INT NOT NULL,
   `destination` INT NOT NULL,
-  `base_fare` DECIMAL(10,2),
   PRIMARY KEY (`line_name`),
   FOREIGN KEY (`origin`) REFERENCES `Station`(`station_id`),
   FOREIGN KEY (`destination`) REFERENCES `Station`(`station_id`)
@@ -62,6 +61,7 @@ CREATE TABLE `Train_Schedule` (
   `depart_datetime` DATETIME,
   `arrival_datetime` DATETIME,
   `travel_time` INT,
+  `fare` DECIMAL(10,2),
   PRIMARY KEY (`schedule_id`),
   FOREIGN KEY (`line_name`) REFERENCES `Transit_Line`(`line_name`),
   FOREIGN KEY (`train_id`) REFERENCES `Train`(`train_id`)
