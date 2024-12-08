@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*" %>
+<%@ page import="java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*, java.text.*" %>
 <%@ page import="com.cs527.pkg.ApplicationDB" %>
 
 <%
@@ -53,9 +53,9 @@
  
  
                        String query = "SELECT ts.schedule_id, ts.depart_datetime, ts.arrival_datetime, " +
-                               "ts.travel_time, ts.fare, " +
+                               "ts.travel_time, ts.fare, st1.station_id AS st1id, st2.station_id AS st2id, " +
                                "st1.name AS origin_station, " +
-                               "COALESCE(intermediate_station.name, st2.name) AS destination_station " +  
+                               "COALESCE(intermediate_station.name, st2.name) AS destination_station " +
                                "FROM Train_Schedule ts " +
                                "JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
                                "JOIN Station st1 ON tl.origin = st1.station_id " +
@@ -102,7 +102,7 @@
             out.println("</form>");
 
             // Display schedules table with fare and duration
-            out.println("<table border='1'><tr><th>Train ID</th><th>Departure</th><th>Arrival</th><th>Duration</th><th>Fare</th><th>Origin</th><th>Destination</th><th>Details</th></tr>");
+            out.println("<table border='1'><tr><th>Train ID</th><th>Departure</th><th>Arrival</th><th>Duration</th><th>Fare</th><th>Origin</th><th>Destination</th><th>Details</th><th>Action</th></tr>");
 
             do {
                 out.println("<tr>");
@@ -114,7 +114,28 @@
                 out.println("<td>" + rs.getString("origin_station") + "</td>");
                 out.println("<td>" + rs.getString("destination_station") + "</td>");
                 out.println("<td><a href='trainDetails.jsp?schedule_id=" + rs.getInt("schedule_id") + "'>View Details</a></td>");
+                out.println("<td>");
+                // Book button, passing scheduleId, origin, destination, and travelDate
+                out.println("<form action='reservation.jsp' method='get'>");
+                out.println("<input type='hidden' name='scheduleId' value='" + rs.getInt("schedule_id") + "' />");
+                out.println("<input type='hidden' name='origin' value='" + rs.getString("origin_station") + "' />");
+                out.println("<input type='hidden' name='destination' value='" + rs.getString("destination_station") + "' />");
+                out.println("<input type='hidden' name='st1id' value='" + rs.getInt("st1id") + "' />");
+                out.println("<input type='hidden' name='st2id' value='" + rs.getInt("st2id") + "' />");
+                out.println("<input type='hidden' name='departTime' value='" + rs.getTimestamp("depart_datetime") + "' />");
+                out.println("<input type='hidden' name='arrivalTime' value='" + rs.getTimestamp("arrival_datetime") + "' />");
+                out.println("<input type='hidden' name='travelTime' value='" + rs.getInt("travel_time") + "' />");
+                out.println("<input type='hidden' name='fare' value='" + rs.getBigDecimal("fare") + "' />");
+                java.sql.Timestamp departTimestamp = rs.getTimestamp("depart_datetime");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String departDate = sdf.format(departTimestamp);
+
+                out.println("<input type='hidden' name='travelDate' value='" + departDate + "' />");
+                out.println("<input type='submit' value='Book' />");
+                out.println("</form>");
+                out.println("</td>");
                 out.println("</tr>");
+
             } while (rs.next());
 
             out.println("</table>");
