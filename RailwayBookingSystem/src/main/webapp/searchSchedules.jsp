@@ -10,6 +10,8 @@
     String sortOrder = request.getParameter("sortOrder"); // Sorting option
     
 
+    
+
 
     if (sortOrder == null) {
         sortOrder = "departure_ASC"; // Default sorting order
@@ -73,8 +75,12 @@
         pst.setString(1, origin);
         pst.setString(2, destination);
         pst.setString(3, travelDate); // Use the date entered by the user
+                
 
         ResultSet rs = pst.executeQuery();
+/*         out.println("<td>" + rs.getString("origin_station") + "</td>");
+        out.println("<td>" + rs.getString("destination_station") + "</td>"); */
+
 
         // Check if there are any results
         if (!rs.next()) {
@@ -83,7 +89,7 @@
             // Loop through and display results if found
             response.setContentType("text/html");
             out.println("<div class='form-container'>");
-            out.println("<h2>Available Train Schedules</h2>");
+            out.println("<h2 class='section-title'>Available Train Schedules</h2>");
 
             // Sorting options form
             out.println("<form method='get' action='searchSchedules.jsp'>");
@@ -102,7 +108,7 @@
             out.println("<option value='fare_DESC'" + ("fare_DESC".equals(sortOrder) ? " selected" : "") + ">Fare (Highest First)</option>");
             out.println("</select>");
             out.println("</form>");
-
+            out.println("<table class='styled-table'>");
             // Display schedules table with fare and duration
             out.println("<table border='1'><tr><th>Train ID</th><th>Departure</th><th>Arrival</th><th>Duration</th><th>Fare</th><th>Origin</th><th>Destination</th><th>Details</th><th>Action</th></tr>");
 
@@ -165,20 +171,35 @@
         border: 1px solid #ccc;
         border-radius: 5px;
     }
+    h2.section-title {
+        color: #333;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
     table {
         width: 100%;
         border-collapse: collapse;
-    }
+        margin-bottom: 30px;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);    }
 
     th, td {
-        padding: 10px;
+        padding: 12px 15px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
+        border: 1px solid #ddd;
+            }
 
     th {
-        background-color: #f4f4f4;
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+    }
+    
+    td {
+        color: #555;
+        text-align: center;
     }
 
     a {
