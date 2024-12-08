@@ -28,8 +28,6 @@
         String st1id = request.getParameter("st1id");
         String st2id = request.getParameter("st2id");
         
-        out.println(st1id);
-        out.println(st2id);
 
         // Validation: If required parameters are missing, redirect back to search page
         if (scheduleId == null || origin == null || destination == null || travelDate == null ||
