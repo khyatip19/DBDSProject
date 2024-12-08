@@ -27,6 +27,9 @@
         String fare = request.getParameter("fare");
         String st1id = request.getParameter("st1id");
         String st2id = request.getParameter("st2id");
+        
+        out.println(st1id);
+        out.println(st2id);
 
         // Validation: If required parameters are missing, redirect back to search page
         if (scheduleId == null || origin == null || destination == null || travelDate == null ||
@@ -72,13 +75,6 @@
     <input type="checkbox" id="roundTrip" name="roundTrip" value="true">
     <br><br>
 
-    <!-- Return Journey Fields -->
-    <div id="returnJourneySection" style="display:none;">
-        <label for="returnDate">Return Date:</label>
-        <input type="date" id="returnDate" name="returnDate">
-        <br>
-    </div>
- <br>
        
         
         <label for="disability">Do you have a disability?</label>
@@ -87,17 +83,6 @@
         <!-- Submit button -->
         <input type="submit" value="Proceed to Payment" />
     </form>
-    <!-- JavaScript to Toggle Return Journey Section -->
-<script>
-    document.getElementById('roundTrip').addEventListener('change', function() {
-        const returnJourneySection = document.getElementById('returnJourneySection');
-        // Show or hide the return journey section based on checkbox state
-        if (this.checked) {
-            returnJourneySection.style.display = 'block';
-        } else {
-            returnJourneySection.style.display = 'none';
-        }
-    });
-</script>
+
 </body>
 </html>
