@@ -61,6 +61,7 @@
             String st1id = request.getParameter("st1id");
             String st2id = request.getParameter("st2id");
             String disability = request.getParameter("disability");
+            String roundTrip = request.getParameter("roundTrip"); 
 			
             BigDecimal finalFare = new BigDecimal(fare);
             boolean isDiscounted = false;
