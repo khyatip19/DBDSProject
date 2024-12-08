@@ -62,6 +62,7 @@
             String st2id = request.getParameter("st2id");
             String disability = request.getParameter("disability");
             String roundTrip = request.getParameter("roundTrip"); 
+            
 			
             BigDecimal finalFare = new BigDecimal(fare);
             boolean isDiscounted = false;
@@ -69,7 +70,7 @@
                 isDiscounted = true;
                 finalFare = finalFare.multiply(new BigDecimal("0.90")); // 10% discount
             }
-
+			finalFare = ("true".equals(roundTrip)? finalFare.multiply(BigDecimal.valueOf(2)) : finalFare);
             
             String departTimeWithoutMilliseconds = departTime.split(" ")[1].split("\\.")[0]; // e.g., "08:00:00"
 
@@ -90,11 +91,11 @@
                 pstmt.setDate(4, Date.valueOf(LocalDate.now())); // Current date
                 pstmt.setBigDecimal(5, finalFare);
                 pstmt.setInt(6, Integer.parseInt(st1id));
-                pstmt.setInt(7, Integer.parseInt(st1id));
+                pstmt.setInt(7, Integer.parseInt(st2id));
                 pstmt.setDate(8, Date.valueOf(departTime.split(" ")[0])); // Depart date
                 pstmt.setTime(9, Time.valueOf(departTimeWithoutMilliseconds));
                 pstmt.setBigDecimal(10, finalFare);
-                pstmt.setString(11, "One-way"); // Default ticket type, update if needed
+                pstmt.setString(11, ("true".equals(roundTrip)? "Round-Trip" : "One-Way")); // Default ticket type, update if needed
 
                 pstmt.executeUpdate();
             } catch (SQLException e) {
