@@ -70,6 +70,9 @@
                 isDiscounted = true;
                 finalFare = finalFare.multiply(new BigDecimal("0.90")); // 10% discount
             }
+            BigDecimal disc= new BigDecimal(0);
+            if(isDiscounted == true) disc = BigDecimal.valueOf(10); 
+            
 			finalFare = ("true".equals(roundTrip)? finalFare.multiply(BigDecimal.valueOf(2)) : finalFare);
             
             String departTimeWithoutMilliseconds = departTime.split(" ")[1].split("\\.")[0]; // e.g., "08:00:00"
@@ -94,7 +97,7 @@
                 pstmt.setInt(7, Integer.parseInt(st2id));
                 pstmt.setDate(8, Date.valueOf(departTime.split(" ")[0])); // Depart date
                 pstmt.setTime(9, Time.valueOf(departTimeWithoutMilliseconds));
-                pstmt.setBigDecimal(10, finalFare);
+                pstmt.setBigDecimal(10, disc);
                 pstmt.setString(11, ("true".equals(roundTrip)? "Round-Trip" : "One-Way")); // Default ticket type, update if needed
 
                 pstmt.executeUpdate();
