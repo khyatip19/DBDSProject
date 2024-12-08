@@ -66,13 +66,20 @@
 
         <label for="customerAge">Customer Age:</label>
         <input type="number" id="customerAge" name="customerAge" placeholder="Enter your age" min="1" required />
+        
+     <!-- Round-trip option -->
+    <label for="roundTrip">Round Trip</label>
+    <input type="checkbox" id="roundTrip" name="roundTrip" value="true">
+    <br><br>
 
-        <!-- Ticket type selection -->
-        <label for="ticketType">Ticket Type:</label>
-        <select id="ticketType" name="ticketType" required>
-            <option value="one-way">One-way</option>
-            <option value="round-trip">Round-trip</option>
-        </select>
+    <!-- Return Journey Fields -->
+    <div id="returnJourneySection" style="display:none;">
+        <label for="returnDate">Return Date:</label>
+        <input type="date" id="returnDate" name="returnDate">
+        <br>
+    </div>
+ <br>
+       
         
         <label for="disability">Do you have a disability?</label>
         <input type="checkbox" id="disability" name="disability"><br><br>
@@ -80,5 +87,17 @@
         <!-- Submit button -->
         <input type="submit" value="Proceed to Payment" />
     </form>
+    <!-- JavaScript to Toggle Return Journey Section -->
+<script>
+    document.getElementById('roundTrip').addEventListener('change', function() {
+        const returnJourneySection = document.getElementById('returnJourneySection');
+        // Show or hide the return journey section based on checkbox state
+        if (this.checked) {
+            returnJourneySection.style.display = 'block';
+        } else {
+            returnJourneySection.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>
