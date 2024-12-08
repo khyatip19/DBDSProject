@@ -92,8 +92,10 @@ CREATE TABLE `Reservation` (
   `departure_time` TIME,
   `discount` DECIMAL(5,2),
   `ticket_type` VARCHAR(20),
+  `related_reservation_id` INT,
   PRIMARY KEY (`reservation_number`),
   FOREIGN KEY (`username`) REFERENCES `Customer`(`username`),
+  FOREIGN KEY (`related_reservation_id`) REFERENCES `Reservation`(`reservation_number`),
   FOREIGN KEY (`schedule_id`) REFERENCES `Train_Schedule`(`schedule_id`),
   FOREIGN KEY (`origin`) REFERENCES `Station`(`station_id`),
   FOREIGN KEY (`destination`) REFERENCES `Station`(`station_id`)
