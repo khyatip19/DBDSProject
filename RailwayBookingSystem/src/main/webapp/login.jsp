@@ -26,17 +26,40 @@
             // Prepare and execute the login query
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-
-            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+			
+            // Check if user already in table or not
+            // String query = "SELECT p.username, p.password FROM Person p JOIN Customer c ON p.username = c.username WHERE p.username = ? AND p.password = ?";
+            String query = "SELECT p.*, " +
+                    "CASE " +
+                    "   WHEN e.role = 'admin' THEN 'admin' " +
+                    "   WHEN e.role = 'customer_rep' THEN 'rep' " +
+                    "   ELSE 'customer' " +
+                    "END as user_role " +
+                    "FROM Person p " +
+                    "LEFT JOIN Employee e ON p.username = e.username " +
+                    "WHERE p.username = ? AND p.password = ?";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, username);
             pst.setString(2, password);
+            
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
                 // Set session attribute and redirect
+                String role = rs.getString("user_role");
                 session.setAttribute("username", username);
-                response.sendRedirect("welcome.jsp"); // Redirect to welcome page
+                session.setAttribute("role", role);
+             	// Redirect based on role
+                switch(role) {
+                    case "admin":
+                        response.sendRedirect("adminDashboard.jsp");
+                        break;
+                    case "rep":
+                        response.sendRedirect("repDashboard.jsp");
+                        break;
+                    default:
+                        response.sendRedirect("welcome.jsp");
+                }
             } else {
                 message = "Invalid username or password.";
             }

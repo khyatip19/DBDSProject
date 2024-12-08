@@ -25,15 +25,22 @@
             String firstName = request.getParameter("first_name");
             String lastName = request.getParameter("last_name");
 
-            String query = "INSERT INTO users (username, password, email, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1, username);
-            pst.setString(2, password); // Note: Use password hashing in production!
-            pst.setString(3, email);
-            pst.setString(4, firstName);
-            pst.setString(5, lastName);
+            String personQuery = "INSERT INTO Person (username, password, first_name, last_name) VALUES (?, ?, ?, ?)";
+            PreparedStatement personPst = con.prepareStatement(personQuery);
+            personPst.setString(1, username);
+            personPst.setString(2, password); // Note: Use password hashing in production!
+            personPst.setString(3, firstName);
+            personPst.setString(4, lastName);
+            personPst.executeUpdate();
 
-            int rowCount = pst.executeUpdate();
+            String customerQuery = "INSERT INTO Customer (username, email) VALUES (?, ?)";
+            PreparedStatement customerPst = con.prepareStatement(customerQuery);
+            customerPst.setString(1, username);
+            customerPst.setString(2, email);
+            customerPst.executeUpdate();
+
+            /*  int rowCount = personPst.executeUpdate(); */
+            int rowCount = 1;
             if (rowCount > 0) {
                 // Registration successful, redirect to login page
                 db.closeConnection(con);
@@ -45,8 +52,7 @@
 
             // Close the database connection
             db.closeConnection(con);
-        } catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-            // This exception is thrown if there's a unique constraint violation (e.g., duplicate username or email)
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
             message = "Username or email already exists. Please try a different one.";
         } catch (Exception e) {
             e.printStackTrace();
