@@ -15,7 +15,7 @@
         
         // Query to get the details for the train schedule
         String scheduleQuery = "SELECT ts.schedule_id, ts.depart_datetime, ts.arrival_datetime, " +
-                               "tl.line_name, tl.base_fare, " +
+                               "tl.line_name, ts.fare, " +
                                "st1.name AS origin_station, st2.name AS destination_station " +
                                "FROM Train_Schedule ts " +
                                "JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
@@ -32,7 +32,7 @@
             String lineName = rsSchedule.getString("line_name");
             Timestamp departure = rsSchedule.getTimestamp("depart_datetime");
             Timestamp arrival = rsSchedule.getTimestamp("arrival_datetime");
-            BigDecimal baseFare = rsSchedule.getBigDecimal("base_fare");
+            BigDecimal baseFare = rsSchedule.getBigDecimal("fare");
             String origin = rsSchedule.getString("origin_station");
             String destination = rsSchedule.getString("destination_station");
             
