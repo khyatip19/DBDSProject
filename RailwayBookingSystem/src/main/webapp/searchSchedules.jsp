@@ -8,6 +8,8 @@
     String destination = request.getParameter("destination");
     String travelDate = request.getParameter("travelDate");
     String sortOrder = request.getParameter("sortOrder"); // Sorting option
+    
+
 
     if (sortOrder == null) {
         sortOrder = "departure_ASC"; // Default sorting order
