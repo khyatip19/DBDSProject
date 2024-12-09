@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="com.cs527.pkg.*" %>
 <%@ page import="java.io.*, java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -38,15 +38,18 @@
                     "FROM Person p " +
                     "LEFT JOIN Employee e ON p.username = e.username " +
                     "WHERE p.username = ? AND p.password = ?";
+
+            String query = "SELECT username, password, role FROM Person WHERE username = ? AND password = ?";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, username);
             pst.setString(2, password);
-            
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                // Set session attribute and redirect
-                String role = rs.getString("user_role");
+                // User authenticated
+                String role = rs.getString("role");
+
+                // Set session attribute
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
              	// Redirect based on role
@@ -59,6 +62,16 @@
                         break;
                     default:
                         response.sendRedirect("welcome.jsp");
+                }
+                session.setAttribute("role", role);
+
+                // Redirect based on role
+                if ("Customer".equals(role)) {
+                    response.sendRedirect("welcome.jsp");
+                } else if ("Admin".equals(role)) {
+                    response.sendRedirect("admin_dashboard.jsp");
+                } else if ("Customer Representative".equals(role)) {
+                    response.sendRedirect("rep_dashboard.jsp");
                 }
             } else {
                 message = "Invalid username or password.";

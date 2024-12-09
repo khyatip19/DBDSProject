@@ -39,7 +39,10 @@
             customerPst.setString(2, email);
             customerPst.executeUpdate();
 
+<<<<<<< HEAD
             /*  int rowCount = personPst.executeUpdate(); */
+=======
+>>>>>>> branch 'main' of https://github.com/khyatip19/DBDSProject.git
             int rowCount = 1;
             if (rowCount > 0) {
                 // Registration successful, redirect to login page
@@ -53,7 +56,11 @@
             // Close the database connection
             db.closeConnection(con);
         } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+<<<<<<< HEAD
             message = "Username or email already exists. Please try a different one.";
+=======
+            message = "Username already exists. Please try a different one.";
+>>>>>>> branch 'main' of https://github.com/khyatip19/DBDSProject.git
         } catch (Exception e) {
             e.printStackTrace();
             message = "Error: " + e.getMessage();
@@ -62,8 +69,8 @@
 %>
 
 <div class="form-container">
-
-    <h2>Create an Account</h2>
+	<h2>Hi, New here?</h2>
+    <h2>Please Create an Account</h2>
     <p class="subtitle">Fill in your details to sign up.</p>
 
     <!-- Display the error message if there's an issue -->
@@ -71,11 +78,12 @@
 
     <!-- Registration Form -->
     <form method="post" action="register.jsp">
-        <input type="text" name="username" placeholder="User ID" required>
+    	<input type="text" name="first_name" placeholder="First Name">
+        <input type="text" name="last_name" placeholder="Last Name">
+        <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
         <input type="email" name="email" placeholder="E-Mail Address" required>
-        <input type="text" name="first_name" placeholder="First Name">
-        <input type="text" name="last_name" placeholder="Last Name">
+        
         <input type="submit" value="Sign Up">
     </form>
 

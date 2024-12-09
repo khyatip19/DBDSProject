@@ -11,32 +11,42 @@ public class ApplicationDB {
 	}
 
 	public Connection getConnection(){
+		
+		//Create a connection string
 		String connectionUrl = "jdbc:mysql://localhost:3306/RailwayBookingSystem?serverTimezone=UTC";
-		Connection connection = null;	
+		Connection connection = null;
+		
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+			//Load JDBC driver - new jdbc driver
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+		 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+	            // Print stack trace for any driver loading issues
+	            e.printStackTrace();
+	    }
+		try {
+			//Create a connection to your DB
+			connection = DriverManager.getConnection(connectionUrl,"root", "mysqlroot");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
-			connection = DriverManager.getConnection(connectionUrl,"root", "Vatshars@123");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}		
-		return connection;	
+		
+		return connection;
+		
 	}
 	
 	public void closeConnection(Connection connection){
 		try {
 			connection.close();
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		ApplicationDB dao = new ApplicationDB();
@@ -45,5 +55,7 @@ public class ApplicationDB {
 		System.out.println(connection);		
 		dao.closeConnection(connection);
 	}
+	
+	
 
 }
