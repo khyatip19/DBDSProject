@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Login - Railway Booking System Vatsala</title>
+    <title>Login - Railway Booking System</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 

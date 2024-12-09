@@ -2,14 +2,97 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.math.BigDecimal" %> <!-- Add this import for BigDecimal -->
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation</title>
     <style>
-        form { width: 50%; margin: 0 auto; }
-        label { display: block; margin: 10px 0 5px; }
-        input, select { width: 100%; padding: 8px; margin-bottom: 15px; }
-        input[type="submit"] { width: auto; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            width: 50%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            width: auto;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .booking-details {
+            width: 50%;
+            margin: 0 auto 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-details p {
+            margin: 10px 0;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* Align the checkboxes closer to the labels */
+        input[type="checkbox"] {
+            margin-right: 10px;  /* Adds a small space between checkbox and text */
+        }
+
+        .checkbox-label {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
     </style>
 </head>
 <body>
@@ -36,15 +119,17 @@
     %>
 
     <!-- Display reservation details -->
-    <h3>Booking Details</h3>
-    <p><strong>Schedule ID:</strong> <%= scheduleId %></p>
-    <p><strong>Origin:</strong> <%= origin %></p>
-    <p><strong>Destination:</strong> <%= destination %></p>
-    <p><strong>Travel Date:</strong> <%= travelDate %></p>
-    <p><strong>Departure Time:</strong> <%= departTime %></p>
-    <p><strong>Arrival Time:</strong> <%= arrivalTime %></p>
-    <p><strong>Travel Time:</strong> <%= travelTime %> minutes</p>
-    <p><strong>Fare:</strong> $<%= fare %></p>
+    <div class="booking-details">
+        <h3>Booking Details</h3>
+        <p><strong>Schedule ID:</strong> <%= scheduleId %></p>
+        <p><strong>Origin:</strong> <%= origin %></p>
+        <p><strong>Destination:</strong> <%= destination %></p>
+        <p><strong>Travel Date:</strong> <%= travelDate %></p>
+        <p><strong>Departure Time:</strong> <%= departTime %></p>
+        <p><strong>Arrival Time:</strong> <%= arrivalTime %></p>
+        <p><strong>Travel Time:</strong> <%= travelTime %> minutes</p>
+        <p><strong>Fare:</strong> $<%= fare %></p>
+    </div>
 
     <!-- Reservation form -->
     <form action="confirmReservation.jsp" method="post">
@@ -66,38 +151,19 @@
 
         <label for="customerAge">Customer Age:</label>
         <input type="number" id="customerAge" name="customerAge" placeholder="Enter your age" min="1" required />
-        
-     <!-- Round-trip option -->
-    <label for="roundTrip">Round Trip</label>
-    <input type="checkbox" id="roundTrip" name="roundTrip" value="true">
-    <br><br>
 
-    <!-- Return Journey Fields -->
-    <div id="returnJourneySection" style="display:none;">
-        <label for="returnDate">Return Date:</label>
-        <input type="date" id="returnDate" name="returnDate">
-        <br>
-    </div>
- <br>
-       
-        
-        <label for="disability">Do you have a disability?</label>
+        <!-- Round-trip option -->
+        <label for="roundTrip" class="checkbox-label">Round Trip:</label>
+        <input type="checkbox" id="roundTrip" name="roundTrip" value="true"><br><br>
+
+        <!-- Disability checkbox -->
+        <label for="disability" class="checkbox-label">Do you have a disability?</label>
         <input type="checkbox" id="disability" name="disability"><br><br>
 
         <!-- Submit button -->
-        <input type="submit" value="Proceed to Payment" />
+        <div class="center">
+            <input type="submit" value="Proceed to Payment" />
+        </div>
     </form>
-    <!-- JavaScript to Toggle Return Journey Section -->
-<script>
-    document.getElementById('roundTrip').addEventListener('change', function() {
-        const returnJourneySection = document.getElementById('returnJourneySection');
-        // Show or hide the return journey section based on checkbox state
-        if (this.checked) {
-            returnJourneySection.style.display = 'block';
-        } else {
-            returnJourneySection.style.display = 'none';
-        }
-    });
-</script>
 </body>
 </html>
