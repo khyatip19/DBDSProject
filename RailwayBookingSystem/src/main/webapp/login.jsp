@@ -38,18 +38,15 @@
                     "FROM Person p " +
                     "LEFT JOIN Employee e ON p.username = e.username " +
                     "WHERE p.username = ? AND p.password = ?";
-
-            String query = "SELECT username, password, role FROM Person WHERE username = ? AND password = ?";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, username);
             pst.setString(2, password);
+            
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                // User authenticated
-                String role = rs.getString("role");
-
-                // Set session attribute
+                // Set session attribute and redirect
+                String role = rs.getString("user_role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
              	// Redirect based on role
@@ -62,16 +59,6 @@
                         break;
                     default:
                         response.sendRedirect("welcome.jsp");
-                }
-                session.setAttribute("role", role);
-
-                // Redirect based on role
-                if ("Customer".equals(role)) {
-                    response.sendRedirect("welcome.jsp");
-                } else if ("Admin".equals(role)) {
-                    response.sendRedirect("admin_dashboard.jsp");
-                } else if ("Customer Representative".equals(role)) {
-                    response.sendRedirect("rep_dashboard.jsp");
                 }
             } else {
                 message = "Invalid username or password.";

@@ -39,10 +39,7 @@
             customerPst.setString(2, email);
             customerPst.executeUpdate();
 
-<<<<<<< HEAD
             /*  int rowCount = personPst.executeUpdate(); */
-=======
->>>>>>> branch 'main' of https://github.com/khyatip19/DBDSProject.git
             int rowCount = 1;
             if (rowCount > 0) {
                 // Registration successful, redirect to login page
@@ -56,11 +53,8 @@
             // Close the database connection
             db.closeConnection(con);
         } catch (java.sql.SQLIntegrityConstraintViolationException e) {
-<<<<<<< HEAD
-            message = "Username or email already exists. Please try a different one.";
-=======
+
             message = "Username already exists. Please try a different one.";
->>>>>>> branch 'main' of https://github.com/khyatip19/DBDSProject.git
         } catch (Exception e) {
             e.printStackTrace();
             message = "Error: " + e.getMessage();

@@ -1,4 +1,5 @@
-<%@ page import="jakarta.servlet.http.*" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="com.cs527.pkg.*" %>
+<%@ page import="java.io.*, java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*" %>
 <%
     String username = (String) session.getAttribute("username");
     String role = (String) session.getAttribute("role");
