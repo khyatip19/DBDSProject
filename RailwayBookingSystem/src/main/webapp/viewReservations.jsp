@@ -15,7 +15,7 @@
     try {
         // Database connection
         Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/railwaybookingsystem", "root", "mysqlroot");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/railwaybookingsystem", "root", "Vatshars@123");
 
         // Query for current reservations
         String currentReservationsQuery = 

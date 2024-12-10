@@ -78,7 +78,7 @@
             int reservationNumber = (int) (Math.random() * 1000000);
 
             // Insert the reservation into the database
-            try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/railwaybookingsystem", "root", "mysqlroot")) {
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/railwaybookingsystem", "root", "Vatshars@123")) {
                 String insertQuery = "INSERT INTO Reservation (reservation_number, username, schedule_id, reservation_date, total_fare, origin, destination, depart_date, departure_time, discount, ticket_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pstmt = conn.prepareStatement(insertQuery);
                 

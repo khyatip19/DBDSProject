@@ -44,9 +44,9 @@
 
             <!-- Reports Section -->
             <div class="admin-card">
-                <h3>Reports and Analytics</h3>
+                <h3>Reports & Analytics</h3>
                 <a href="salesReport.jsp" class="link-button">Sales Reports</a>
-                <a href="reservationsByLine.jsp" class="link-button">Reservations by Line</a>
+                <a href="reservationsList.jsp" class="link-button">Reservations List</a>
                 <a href="revenueReport.jsp" class="link-button">Revenue Analysis</a>
             </div>
 

@@ -2,7 +2,6 @@
 <%@ page import="java.io.*, java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*" %>
 
 <%
-    // Check if user is logged in as admin
     if (session.getAttribute("role") == null || !session.getAttribute("role").equals("admin")) {
         response.sendRedirect("login.jsp");
         return;
