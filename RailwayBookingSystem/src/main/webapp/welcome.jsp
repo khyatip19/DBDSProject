@@ -11,10 +11,10 @@
 
     // Redirect non-customer roles to their respective dashboards
     if ("Admin".equals(role)) {
-        response.sendRedirect("admin_dashboard.jsp");
+        response.sendRedirect("adminDashboard.jsp");
         return;
     } else if ("Customer Representative".equals(role)) {
-        response.sendRedirect("rep_dashboard.jsp");
+        response.sendRedirect("repDashboard.jsp");
         return;
     }
 %>
