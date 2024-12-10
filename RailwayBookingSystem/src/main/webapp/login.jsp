@@ -49,6 +49,11 @@
                 String role = rs.getString("user_role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String fullName = firstName + " " + lastName;
+                session.setAttribute("fullName", fullName);
+                
              	// Redirect based on role
                 switch(role) {
                     case "admin":

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="com.cs527.pkg.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="com.cs527.pkg.*" %>
 <%@ page import="java.io.*, java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*" %>
 
 <%
@@ -13,11 +13,12 @@
 <head>
     <title>Most Active Transit Lines</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
 </head>
 <body>
     <div class="admin-container">
         <h2>Top 5 Most Active Transit Lines</h2>
-        
+
         <div class="report-section">
             <table>
                 <tr>
@@ -29,57 +30,74 @@
                 </tr>
                 <%
                     ApplicationDB db = new ApplicationDB();
-                    Connection con = db.getConnection();
-                    
-                    String query = "SELECT tl.line_name, " +
-                                 "COUNT(*) as total_reservations, " +
-                                 "SUM(r.total_fare) as total_revenue, " +
-                                 "CONCAT(s1.name, ' → ', s2.name) as popular_route " +
-                                 "FROM Reservation r " +
-                                 "JOIN Train_Schedule ts ON r.schedule_id = ts.schedule_id " +
-                                 "JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
-                                 "JOIN Station s1 ON r.origin = s1.station_id " +
-                                 "JOIN Station s2 ON r.destination = s2.station_id " +
-                                 "GROUP BY tl.line_name " +
-                                 "ORDER BY total_reservations DESC " +
-                                 "LIMIT 5";
-                     
-                    /* String query = 
-                            "SELECT " +
-                            "   tl.line_name, " +
-                            "   COUNT(*) as total_reservations, " +
-                            "   SUM(r.total_fare) as total_revenue, " +
-                            "   CONCAT(s1.name, ' → ', s2.name) as popular_route " +
-                            "FROM Train_Schedule ts " +
-                            "JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
-                            "JOIN Reservation r ON ts.schedule_id = r.schedule_id " +
-                            "JOIN Station s1 ON r.origin = s1.station_id " +
-                            "JOIN Station s2 ON r.destination = s2.station_id " +
-                            "GROUP BY tl.line_name " +
-                            "ORDER BY total_reservations DESC " +
-                            "LIMIT 5"; */
-                    
-                    Statement stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery(query);
-                    
-                    int rank = 1;
-                    while(rs.next()) {
+                    Connection con = null;
+                    try {
+                        con = db.getConnection();
+                        
+                        // Improved query to show proper route information
+                        String query = 
+                            "WITH LineStats AS ( " +
+                            "    SELECT " +
+                            "        ts.line_name, " +
+                            "        COUNT(*) as total_reservations, " +
+                            "        SUM(r.total_fare) as total_revenue, " +
+                            "        s1.name as origin_name, " +
+                            "        s2.name as dest_name " +
+                            "    FROM Reservation r " +
+                            "    JOIN Train_Schedule ts ON r.schedule_id = ts.schedule_id " +
+                            "    JOIN Transit_Line tl ON ts.line_name = tl.line_name " +
+                            "    JOIN Station s1 ON tl.origin = s1.station_id " +
+                            "    JOIN Station s2 ON tl.destination = s2.station_id " +
+                            "    GROUP BY ts.line_name, s1.name, s2.name " +
+                            ") " +
+                            "SELECT * FROM LineStats " +
+                            "ORDER BY total_reservations DESC, total_revenue DESC " +
+                            "LIMIT 5";
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(query);
+
+                        int rank = 1;
+                        boolean hasResults = false;
+                        
+                        while(rs.next()) {
+                            hasResults = true;
+                            String route = rs.getString("origin_name") + " to " + rs.getString("dest_name");
                 %>
-                    <tr>
-                        <td><%= rank++ %></td>
-                        <td><%= rs.getString("line_name") %></td>
-                        <td><%= rs.getInt("total_reservations") %></td>
-                        <td>$<%= String.format("%.2f", rs.getDouble("total_revenue")) %></td>
-                        <td><%= rs.getString("popular_route") %></td>
-                    </tr>
-                <% } 
-                   db.closeConnection(con);
+                            <tr>
+                                <td><%= rank++ %></td>
+                                <td><%= rs.getString("line_name") %></td>
+                                <td><%= rs.getInt("total_reservations") %></td>
+                                <td>$<%= String.format("%,.2f", rs.getDouble("total_revenue")) %></td>
+                                <td><%= route %></td>
+                            </tr>
+                <%
+                        }
+                        
+                        if (!hasResults) {
+                %>
+                            <tr>
+                                <td colspan="5" class="no-results">No transit line data available</td>
+                            </tr>
+                <%
+                        }
+                    } catch(Exception e) {
+                        out.println("<tr><td colspan='5' class='error'>Error: " + e.getMessage() + "</td></tr>");
+                        e.printStackTrace();
+                    } finally {
+                        if(con != null) {
+                            try {
+                                db.closeConnection(con);
+                            } catch(Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 %>
             </table>
         </div>
-        
-        <div style="margin-top: 20px; text-align: center;">
-       <!--  <div class="button-container"> -->
+
+        <div class="button-container">
             <a href="adminDashboard.jsp" class="link-button">Back to Dashboard</a>
         </div>
     </div>

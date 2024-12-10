@@ -2,9 +2,33 @@
 <%@ page import="java.io.*, java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*" %>
 
 <%
+    // Check admin access
     if (session.getAttribute("role") == null || !session.getAttribute("role").equals("admin")) {
         response.sendRedirect("login.jsp");
         return;
+    }
+
+    // Get admin details from database
+    String adminName = "Administrator";  // Default value
+    try {
+        ApplicationDB db = new ApplicationDB();
+        Connection con = db.getConnection();
+        
+        String username = (String) session.getAttribute("username");
+        if (username != null) {
+            String query = "SELECT first_name, last_name FROM Person WHERE username = ?";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                adminName = rs.getString("first_name") + " " + rs.getString("last_name");
+            }
+        }
+        
+        db.closeConnection(con);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 %>
 
@@ -20,20 +44,30 @@
             gap: 20px;
             padding: 20px;
         }
-        
+
         .admin-card {
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        .welcome-message {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="form-container" style="max-width: 800px;">
         <h2>Admin Dashboard</h2>
-        <p class="subtitle">Welcome, <%= session.getAttribute("adminUser") %></p>
+<%--         <p class="welcome-message">Welcome, <%= adminName %></p> --%>
+        <p class="subtitle">Welcome, <%= session.getAttribute("fullName") != null ? session.getAttribute("fullName") : "Administrator" %></p>
 
+        <!-- Rest of your dashboard code remains the same -->
+        
         <div class="admin-grid">
             <!-- Customer Representatives Management -->
             <div class="admin-card">
@@ -46,7 +80,7 @@
             <div class="admin-card">
                 <h3>Reports & Analytics</h3>
                 <a href="salesReport.jsp" class="link-button">Sales Reports</a>
-                <a href="reservationsList.jsp" class="link-button">Reservations List</a>
+                <a href="reservationList.jsp" class="link-button">Reservations List</a>
                 <a href="revenueReport.jsp" class="link-button">Revenue Analysis</a>
             </div>
 
