@@ -3,7 +3,7 @@
 <%@ page import="java.io.*, java.sql.*, jakarta.servlet.http.*, jakarta.servlet.*" %> --%>
 <%
     String role = (String) session.getAttribute("role");
-    if (!"Customer Representative".equals(role)) {
+    if (!"rep".equals(role)) {
         response.sendRedirect("login.jsp?message=Unauthorized access.");
         return;
     }

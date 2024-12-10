@@ -100,9 +100,9 @@
 
         <!-- Revenue by Customer Type -->
         <div class="analysis-section">
-            <h3>Revenue by Customer Type</h3>
+            <h3>Revenue by Customer Name</h3>
             <%
-                String customerTypeQuery = 
+                /* String customerTypeQuery = 
                     "SELECT " +
                     "CASE " +
                     "    WHEN discount > 0 THEN 'Discounted Fare' " +
@@ -112,22 +112,34 @@
                     "SUM(total_fare) as revenue, " +
                     "AVG(total_fare) as avg_fare " +
                     "FROM Reservation " +
-                    "GROUP BY CASE WHEN discount > 0 THEN 'Discounted Fare' ELSE 'Regular Fare' END";
-                
-                ResultSet customerTypes = stmt.executeQuery(customerTypeQuery);
+                    "GROUP BY CASE WHEN discount > 0 THEN 'Discounted Fare' ELSE 'Regular Fare' END"; */
+                    
+                    
+                    String customerNameQuery =
+                    "SELECT " +
+                    "  r.username AS customer_name, " +
+                    "  COUNT(*) AS booking_count, " +
+                    "  SUM(r.total_fare) AS total_revenue, " +
+                    "  AVG(r.total_fare) AS avg_fare " +
+                    "FROM Reservation r " +
+                    "GROUP BY r.username " +
+                    "ORDER BY total_revenue DESC";
+                    
+                ResultSet customerTypes = stmt.executeQuery(customerNameQuery);
             %>
             <table>
                 <tr>
-                    <th>Customer Type</th>
+                    <th>Customer Name</th>
                     <th>Number of Bookings</th>
                     <th>Total Revenue</th>
                     <th>Average Fare</th>
                 </tr>
                 <% while(customerTypes.next()) { %>
                     <tr>
-                        <td><%= customerTypes.getString("customer_type") %></td>
+                        <%-- <td><%= customerTypes.getString("customer_type") %></td> --%>
+                        <td><%= customerTypes.getString("customer_name") %></td>
                         <td><%= customerTypes.getInt("booking_count") %></td>
-                        <td>$<%= String.format("%.2f", customerTypes.getDouble("revenue")) %></td>
+                        <td>$<%= String.format("%.2f", customerTypes.getDouble("total_revenue")) %></td>
                         <td>$<%= String.format("%.2f", customerTypes.getDouble("avg_fare")) %></td>
                     </tr>
                 <% } %>
