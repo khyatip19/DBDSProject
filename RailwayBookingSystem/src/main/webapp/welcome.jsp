@@ -31,6 +31,9 @@
         <p class="subtitle">You are successfully logged in.</p>
         <p><a href="search.jsp" class="link-button">Search Train Schedules</a></p>
         <p><a href="viewReservations.jsp" class="link-button">View Reservations</a></p>
+            <a href="sendQuestion.jsp" class="link-button">Send a Question</a>
+            <a href="browserQuestion.jsp" class="link-button">Browse Questions</a>
+    <a href="searchQuestions.jsp" class="link-button">Search Customer Questions</a>
         <p><a href="logout.jsp" class="link-button">Logout</a></p>
     </div>
 </body>
