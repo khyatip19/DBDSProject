@@ -78,7 +78,7 @@
     }
 %>
 
-<div class="form-container">
+<div class="form-container" style="max-width: 400px;">
 
     <!-- Display Success/Error Message -->
     <% if (!message.isEmpty()) { %>

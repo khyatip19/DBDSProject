@@ -2,7 +2,6 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="com.cs527.pkg.ApplicationDB" %>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,15 +13,19 @@
     <div class="form-container">
         <h2>Manage Train Schedules</h2>
         <p class="subtitle">View, edit, or delete train schedules below.</p>
+        
+
+
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Schedule ID</th>
                         <th>Line Name</th>
-                        <th>Train ID</th>
                         <th>Departure</th>
                         <th>Arrival</th>
+                        <th>Travel Time</th>
+                        <th>Fare</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -66,6 +69,10 @@
         </tbody>
     </table>
     </div>
+         
+        <div class="button-container">
+            <a href="repDashboard.jsp" class="link-button">Back to Dashboard</a>
+        </div>
     </div>
 </body>
 </html>

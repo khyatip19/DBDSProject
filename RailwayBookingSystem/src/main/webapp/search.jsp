@@ -20,6 +20,7 @@
             <input type="text" name="destination" placeholder="Destination Station" required>
             <input type="date" name="travelDate" required>
             <input type="submit" value="Search">
+            <div class="button-container"><a href="welcome.jsp" class="link-button">Back to Dashboard</a></div>
         </form>
     </div>
 </body>

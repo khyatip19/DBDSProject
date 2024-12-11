@@ -62,8 +62,8 @@
     }
 %>
 
-<div class="form-container">
-	<h2>Hi, New here?</h2>
+<div class="form-container" style="max-width: 400px;">
+	
     <h2>Please Create an Account</h2>
     <p class="subtitle">Fill in your details to sign up.</p>
 

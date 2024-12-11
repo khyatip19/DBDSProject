@@ -89,6 +89,11 @@
             out.println("</tbody>");
             out.println("</table>");
         }
+        
+        out.println("<div class='button-container'>");
+        out.println("    <a href='welcome.jsp' class='link-button'>Back to Dashboard</a>");
+        
+        out.println("</div>");
 
     } catch (SQLException e) {
         e.printStackTrace();
@@ -101,40 +106,62 @@
 %>
 
 <!-- CSS for better table formatting -->
+<!-- CSS for better table formatting -->
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 20px;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        width: 100%;
+        max-width: 900px;
+        text-align: center;
+        margin-top: 20px;
     }
 
     h2.section-title {
-        color: #333;
+        color: #333333;
         font-size: 24px;
         text-align: center;
         margin-bottom: 20px;
+        font-weight: bold;
     }
 
     .styled-table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 30px;
-        background-color: white;
+        margin-bottom: 20px;
+        background-color: #ffffff;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
     }
 
-    .styled-table th, .styled-table td {
+    .styled-table th, 
+    .styled-table td {
         padding: 12px 15px;
-        text-align: left;
+        text-align: center;
     }
 
     .styled-table th {
         background-color: #007bff;
-        color: white;
+        color: #ffffff;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 0.03em;
     }
 
     .styled-table tr:nth-child(even) {
-        background-color: #f9f9f9;
+        background-color: #f8f9fa;
     }
 
     .styled-table tr:hover {
@@ -142,18 +169,48 @@
     }
 
     .styled-table td {
-        color: #555;
+        color: #555555;
+        font-size: 14px;
     }
 
-    .styled-table td, .styled-table th {
-        border: 1px solid #ddd;
-    }
-
-    .styled-table td {
-        text-align: center;
-    }
-
+    .styled-table td, 
     .styled-table th {
-        text-align: center;
+        border: 1px solid #dddddd;
+    }
+
+    .link-button {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #ffffff;
+        background-color: #007bff; /* Primary blue color */
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        margin: 10px 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .link-button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        transform: translateY(-2px); /* Lift effect */
+    }
+
+    .button-container {
+        text-align: center; /* Center-align buttons */
+        margin-top: 20px;
+    }
+
+    .no-results {
+        color: #666666;
+        font-size: 16px;
+        margin: 20px 0;
+    }
+
+    p {
+        color: #555555;
+        font-size: 16px;
+        line-height: 1.5;
     }
 </style>

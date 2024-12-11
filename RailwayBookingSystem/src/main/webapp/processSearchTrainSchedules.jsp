@@ -98,7 +98,7 @@
             <% } %>
         </div>
         <div class="button-container">
-            <a href="searchTrainSchedules.jsp" class="link-button">Back to Search</a>
+            <a href="repDashboard.jsp" class="link-button">Back to Dashboard</a>
         </div>
     </div>
 </body>

@@ -9,44 +9,99 @@
     String username = (String) session.getAttribute("username");
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Representative Dashboard</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
         .dashboard-link {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 20px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
             text-align: center;
-            width: 200px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .dashboard-link:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .logout {
+            background-color: #dc3545;
+        }
+
+        .logout:hover {
+            background-color: #a71d2a;
+        }
+
+        .link-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-link {
+                width: 100%;
+                margin: 10px 0;
+            }
         }
     </style>
 </head>
-
 <body>
-    <h1>Welcome, <%= username %>!</h1>
-    <p>This is your Customer Representative dashboard.</p>
-    
-    <a href="manageTrainSchedules.jsp" class="dashboard-link">Manage Train Schedules</a>
+    <div class="container">
+        <h1>Welcome, <%= username %>!</h1>
+        <p>Use the options below to manage tasks.</p>
         
-
-    <a href="answerQuestion.jsp" class="dashboard-link">Answer Customer Questions</a>
-        <a href="searchTrainSchedules.jsp" class="dashboard-link">Search Train Schedules</a>
-    <a href="searchReservations.jsp" class="dashboard-link">Search Customer Reservations</a>
-
-    
-<!--     <br></br>
-    <a href="editDeleteTrainSchedule.jsp" class="dashboard-link">Ishaan Train Schedules</a>
-
-    <a href="searchQuestions.jsp" class="dashboard-link">Ishaan Search Questions</a>
-     -->
-    <a href="logout.jsp" class="dashboard-link">Logout</a>
+        <div class="link-container">
+            <a href="manageTrainSchedules.jsp" class="dashboard-link">Manage Train Schedules</a>
+            <a href="answerQuestion.jsp" class="dashboard-link">Answer Customer Questions</a>
+            <a href="searchTrainSchedules.jsp" class="dashboard-link">Search Train Schedules</a>
+            <a href="searchReservations.jsp" class="dashboard-link">Search Customer Reservations</a>
+            <a href="logout.jsp" class="dashboard-link logout">Logout</a>
+        </div>
+    </div>
 </body>
 </html>

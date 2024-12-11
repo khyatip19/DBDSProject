@@ -66,10 +66,17 @@
 			
             BigDecimal finalFare = new BigDecimal(fare);
             boolean isDiscounted = false;
-            if (disability != null || Integer.parseInt(age) < 14 || Integer.parseInt(age) > 60) {
+            if (disability != null) {
                 isDiscounted = true;
-                finalFare = finalFare.multiply(new BigDecimal("0.90")); // 10% discount
-            }
+                finalFare = finalFare.multiply(new BigDecimal("0.50")); 
+            }else if( Integer.parseInt(age) > 60) {
+            	 isDiscounted = true;
+                 finalFare = finalFare.multiply(new BigDecimal("0.65"));
+            }else if (Integer.parseInt(age) < 14) {
+           	 isDiscounted = true;
+             finalFare = finalFare.multiply(new BigDecimal("0.75")); 
+        }
+            	
             BigDecimal disc= new BigDecimal(0);
             if(isDiscounted == true) disc = BigDecimal.valueOf(10); 
             

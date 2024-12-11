@@ -88,6 +88,9 @@
                 </tbody>
             </table>
         <% } %>
+        <div class="button-container">
+            <a href="repDashboard.jsp" class="link-button">Back to Dashboard</a>
+        </div>
     </div>
 </body>
 </html>
