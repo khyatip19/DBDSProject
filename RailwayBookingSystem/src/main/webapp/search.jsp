@@ -23,5 +23,21 @@
             <div class="button-container"><a href="welcome.jsp" class="link-button">Back to Dashboard</a></div>
         </form>
     </div>
+        <script>
+        // Set minimum date to today
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementsByName("travelDate")[0].setAttribute('min', today);
+        
+        // Prevent selecting same station for origin and destination
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var origin = document.getElementsByName('origin')[0].value;
+            var destination = document.getElementsByName('destination')[0].value;
+            
+            if(origin === destination) {
+                e.preventDefault();
+                alert('Origin and destination stations cannot be the same.');
+            }
+        });
+    </script>
 </body>
 </html>
